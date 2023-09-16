@@ -33,5 +33,8 @@ namespace FAQ
 
         [JsonProperty(PropertyName ="model")]
         public string Model { get; set; }
+
+        [JsonProperty(PropertyName = "temperature")]
+        public decimal Temperature { get; set; }
     }
 }
