@@ -2,6 +2,6 @@
 {
     public interface IFAQClient
     {
-        public Task<object> GetChatResponseAsync( string message );
+        public Task<object> GetChatResponseAsync( Message message);
     }
 }
