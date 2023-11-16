@@ -61,16 +61,8 @@ namespace FAQ
                 Messages = _users,
                 MaxTokens = int.Parse(this.configuration["OpenAI:MAX_TOKENS"]),
                 Model = this.configuration["OpenAI:MODEL"],
+                Temperature = decimal.Parse(this.configuration["OpenAI:TEMPERATURE"])
             };
-
-            // Prepare the request data
-            //var requestData = new
-            //{
-            //    messages = _messages,
-            //    prompt = message,
-            //    max_tokens = this.configuration["OpenAI:MAX_TOKENS"],
-            //    model = this.configuration["OpenAI:MODEL"]
-            //};
 
             string jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(chatRequest);
 
@@ -83,34 +75,34 @@ namespace FAQ
             var response = await this.client.PostAsync(this.client.BaseAddress, content);
             var responseContent = await response.Content.ReadAsStringAsync();
             JObject jObject = JObject.Parse(responseContent);
-            jObject
-            JArray nestedArray = (JArray)jObject["choices"];
             List<object> items = new List<object>();
-            foreach (JToken token in nestedArray)
-            {
-                if (token.Type == JTokenType.Integer)
-                {
-                    items.Add(token.ToObject<int>());
-                }
-                else if (token.Type == JTokenType.String)
-                {
-                    items.Add(token.ToObject<string>());
-                }
-                else
-                {
-                    // Handle other types as needed.
-                    items.Add(token.ToObject<object>());
-                }
-            }
+            ChatResponse respy = new ChatResponse();
+            Usage usage = new Usage();
 
-            var chatResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<ChatResponse>(responseContent);
-            chatResponse.Choices = items;
-            
+            respy.Id = jObject.Property("id").Value.ToString();
+            respy.Object = jObject.Property("object").Value.ToString();
+            respy.Created = ((int)jObject.Property("created").Value);
+            respy.Model = jObject.Property("model").Value.ToString();
+            respy.Usage = Newtonsoft.Json.JsonConvert.DeserializeObject<Usage>(jObject.Property("usage").Value.ToString());
+            dynamic dynamic = jObject.Property("choices").Children()[0]["message"]["content"];
+            // List<object> choice = Newtonsoft.Json.JsonConvert.DeserializeObject(jObject.Property("choices").Value.ToString());
+            List<object> newList = new()
+            {
+                dynamic
+            };
+
+            return newList[0];
+
+
+
+
+
+
+            //var chatResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<ChatResponse>(responseContent);            
 
             // Extract and return the generated message from the response
             // Adjust this code based on the actual JSON structure of the API response
             // For GPT-3.5, you may need to access responseContent["choices"][0]["message"]["content"]
-            return responseContent;
         }
     }
 }

@@ -4,7 +4,13 @@ namespace FAQ
 {
     public class Choices
     {
-        [JsonProperty(PropertyName="choices")]
-        public List<object> Choice { get; set; }
+        [JsonProperty(PropertyName="index")]
+        public int Index { get; set; }
+
+        [JsonProperty(PropertyName="message")]
+        public UserType Message { get; set; }
+
+        [JsonProperty(PropertyName = "finish_reason")]
+        public string FinishReason { get; set; }
     }
 }

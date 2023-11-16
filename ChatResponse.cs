@@ -17,7 +17,7 @@ namespace FAQ
         public string Model { get; set; }
 
         [JsonProperty(PropertyName = "choices")]
-        public List<object> Choices { get; set; }
+        public Choices Choices { get; set; }
 
         [JsonProperty(PropertyName = "usage")]
         public Usage Usage { get; set; }
