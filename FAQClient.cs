@@ -2,6 +2,7 @@
 using System.Text;
 using Newtonsoft;
 using Newtonsoft.Json.Linq;
+using OpenAI.ObjectModels.RequestModels;
 
 namespace FAQ
 {

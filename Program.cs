@@ -1,4 +1,5 @@
 using FAQ;
+using OpenAI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,25 +7,32 @@ var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
 
 /// <summary>
-/// Creates a Cosmos DB database and a container with the specified partition key. 
+/// Creates an HTTP Client. 
 /// </summary>
 /// <returns></returns>
-async Task<HttpClient> InitializeFAQHttpClient( IConfigurationSection configurationSection )
-{
-    string apiKey = configurationSection.GetSection("API_KEY").Value;
-    string openAiUrl = configurationSection.GetSection("API_URL").Value;
-    HttpClient client = new HttpClient();
-    client.BaseAddress = new Uri(openAiUrl);
-    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
-    return client;
-}
+//async Task<HttpClient> InitializeFAQHttpClient( IConfigurationSection configurationSection )
+//{
+//    string apiKey = configurationSection.GetSection("API_KEY").Value;
+//    string openAiUrl = configurationSection.GetSection("API_URL").Value;
+//    HttpClient client = new HttpClient();
+//    client.BaseAddress = new Uri(openAiUrl);
+//    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+//    return client;
+//}
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<HttpClient>(InitializeFAQHttpClient(configuration.GetSection("OpenAi")).GetAwaiter().GetResult());
-builder.Services.AddSingleton<IFAQClient, FAQClient>();
+//builder.Services.AddOpenAIService<ChatGPTClient>(settings =>
+//{
+//    settings.ApiKey = configuration["OpenAI:API_KEY"];
+//    settings.Model = configuration["OpenAI:MODEL"]
+
+//});
+//builder.Services.AddSingleton<HttpClient>(InitializeFAQHttpClient(configuration.GetSection("OpenAi")).GetAwaiter().GetResult());
+//builder.Services.AddSingleton<IFAQClient, FAQClient>();
+builder.Services.AddSingleton<ChatGPTClient>();
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
 var app = builder.Build();
