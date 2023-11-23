@@ -27,7 +27,7 @@ jobs:
             # Add more secrets as needed
           }
           
-          $appSettingsPath = "/appsettings.json" # Modify this path
+          $appSettingsPath = "FAQ\appsettings.json" # Modify this path
 
           foreach ($key in $secrets.Keys) {
             $value = $secrets[$key]
