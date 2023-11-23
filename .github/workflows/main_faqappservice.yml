@@ -16,6 +16,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Replace AppSettings Secrets
+        run: |
+          $secrets = @{
+            "MySecret1" = "${{ secrets.API_KEY }}";
+            "MySecret2" = "${{ secrets.MAX_TOKENS }}";
+            "MySecret3" = "${{ secrets.MODEL }}";
+            "MySecret4" = "${{ secrets.TEMPERATURE }}";
+            "MySecret5" = "${{ secrets.SYSTEM_MESSAGE}}";
+            # Add more secrets as needed
+          }
+          
+          $appSettingsPath = "/appsettings.json" # Modify this path
+
+          foreach ($key in $secrets.Keys) {
+            $value = $secrets[$key]
+            $content = Get-Content -Path $appSettingsPath -Raw
+            $content = $content -replace ('"' + $key + '":\s*".*?"', '"' + $key + '": "' + $value + '"')
+            $content | Set-Content -Path $appSettingsPath -Force
+          }
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
