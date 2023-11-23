@@ -34,6 +34,15 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddSingleton<IFAQClient, FAQClient>();
 builder.Services.AddSingleton<ChatGPTClient>();
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+            builder => builder
+                .WithOrigins("https://www.themaneallure.com/") // Replace with your frontend domain
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+});
 
 var app = builder.Build();
 
@@ -49,5 +58,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowOrigin");
 
 app.Run();
