@@ -20,6 +20,18 @@ IConfiguration configuration = builder.Configuration;
 //    return client;
 //}
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins(configuration["ALLOWED_HOSTS"])
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                      });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -34,15 +46,7 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddSingleton<IFAQClient, FAQClient>();
 builder.Services.AddSingleton<ChatGPTClient>();
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowOrigin",
-            builder => builder
-                .WithOrigins("https://www.themaneallure.com/") // Replace with your frontend domain
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
-});
+
 
 var app = builder.Build();
 
@@ -54,11 +58,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors("AllowOrigin");
 
 app.Run();

@@ -28,6 +28,7 @@ jobs:
             "MySecret3" = "${{ secrets.MODEL }}";
             "MySecret4" = "${{ secrets.TEMPERATURE }}";
             "MySecret5" = "${{ secrets.SYSTEM_MESSAGE}}";
+            "MySecret6" = "${{ secrets.ALLOWED_HOSTS}}";
             # Add more secrets as needed
           }
           
