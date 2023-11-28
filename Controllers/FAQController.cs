@@ -23,7 +23,16 @@
         [HttpPost]
         public async Task<object> GetFAQAnswer( [FromBody] Message message)
         {
-            var response = await this._chatGPTClient.GetChatCompletionAsync(message);
+            string response = string.Empty;
+            try
+            {
+                response = await this._chatGPTClient.GetChatCompletionAsync(message);
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message;
+            }
 
             return response;
 
