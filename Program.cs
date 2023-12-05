@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://www.themaneallure.com/#chat", "https://www.themaneallure.com", "https://fastidious-seahorse-739527.netlify.app/", "https://fastidious-seahorse-739527.netlify.app/#chat")
+                          policy.WithOrigins("https://www.themaneallure.com/#chat", "https://www.themaneallure.com", "https://www.themaneallure.com/#home", "https://www.themaneallure.com/#about-me", "https://www.themaneallure.com/#gallery", "https://www.themaneallure.com/#booking")
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                       });
